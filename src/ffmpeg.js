@@ -6,11 +6,11 @@ function executeFFmpeg(args) {
     const ffmpegProcess = spawn("ffmpeg", args);
 
     ffmpegProcess.stdout.on("data", (data) => {
-      // console.log(`FFmpeg stdout: ${data}`);
+      console.log(`FFmpeg stdout: ${data}`);
     });
 
     ffmpegProcess.stderr.on("data", (data) => {
-      // console.error(`FFmpeg stderr: ${data}`);
+      console.error(`FFmpeg stderr: ${data}`);
     });
 
     ffmpegProcess.on("close", (code) => {
@@ -33,7 +33,7 @@ function executeFFmpeg(args) {
 const GREEN_VIDEO = path.join(__dirname, "videos/cat-concat.mp4");
 const BACK_IMG = path.join(__dirname, "videos/back2.jpg");
 const OUTPUT_VIDEO = path.join(__dirname, "output/ou1.mp4");
-const FONT_PATH = "C:/Windows/Fonts/HMKMRHD.TTF"; // Font path
+const FONT_PATH = "C:/Windows/Fontfs/HMKMRHD.TTF"; // Font path
 
 
 // const DEFAULT_OPTION = ""
@@ -119,7 +119,7 @@ const FILTER_OPTIONS = [
   "[bg1080][nuggi]overlay=(W-w)/2:(H-h)/2[bg_concat]", // 이미지배경과 누끼제거영상을 합성
   `[bg_concat]${TEXT_ARR.join(",")}`, // 합성한 영상에 텍스트를 추가
 ];
-wer(FILTER_OPTIONS)
+// wer(FILTER_OPTIONS)
 
 const args = [
   "-i", GREEN_VIDEO,
@@ -133,6 +133,7 @@ const args = [
 function wer(log) {
   console.log(log);
 }
+
 
 function genAi(mmm){
   const {q1, q2} = mmm
@@ -199,9 +200,6 @@ async function exe(ppp){
       console.error("FFmpeg command failed:", error);
       reject(error)
     }
-  
-  
-  
   );
     
   })
@@ -211,3 +209,18 @@ async function exe(ppp){
 
 // export exe fun
 module.exports = exe
+
+
+
+if (require.main === module) {
+  // This block will run only if the script is executed directly, not when required as a module.
+  console.log("This script is executed directly.");
+  // Place your main script logic here.
+  executeFFmpeg(args)
+    .then(() => console.log("FFmpeg command executed successfully"))
+    .catch((error) => console.error("FFmpeg command failed:", error));
+}
+
+
+
+
