@@ -1,112 +1,173 @@
+const https = require("https");
+
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const path = require("path");
 const cors = require("cors");
-const multer = require('multer');
-const fs = require('fs');
-const fsext = require('fs-extra');  // To handle file copying and moving
+const multer = require("multer");
+const fs = require("fs");
+const fsext = require("fs-extra"); // To handle file copying and moving
+const { v4: uuidv4 } = require("uuid");
+const { genVideo } = require("./ffmpeg");
 
+app.set("trust proxy", 1); // trust first proxy
+app.use(
+  cors({
+    // origin: [
+    //   "http://127.0.0.1:5500",
+    //   "https://9615-211-118-132-210.ngrok-free.app",
+    // ],
+    origin: true,
+    // methods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
+  })
+);
+app.use(
+  session({
+    secret: "@codestates",
+    resave: false,
+    saveUninitialized: true,
 
+    proxy: true,
+    cookie: {
+      // domain: "localhost",
+      // path: "/",
+      // maxAge: 24 * 6 * 60 * 10000,
+      sameSite: "none",
+      httpOnly: !true,
+      secure: true,
+    },
+  })
+  // session({
+  //   secret: "@codestates",
+  //   resave: false,
+  //   saveUninitialized: true,
+  //   cookie: {
+  //     // domain: "localhost",
+  //     // path: "/",
+  //     // maxAge: 24 * 6 * 60 * 10000,
+  //     // sameSite: "none",
+  //     httpOnly: !true,
+  //     secure: !true,
+  //   },
+  // })
+);
 
 // const upload = multer({ dest: 'uploads/' });
 
-var storage = multer.diskStorage({
+let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'src/uploads/')
+    cb(null, "src/uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '.jpg') //Appending .jpg
-  }
-})
+    let mimeType;
+
+    switch (file.mimetype) {
+      case "image/jpeg":
+        mimeType = "jpg";
+        break;
+      case "image/png":
+        mimeType = "png";
+        break;
+      case "image/gif":
+        mimeType = "gif";
+        break;
+      case "image/bmp":
+        mimeType = "bmp";
+        break;
+      default:
+        mimeType = "jpg";
+        break;
+    }
+
+    const outputFileName = `${Date.now()}-${uuidv4()}`;
+
+    cb(null, outputFileName + "." + mimeType); //Appending .jpg
+  },
+});
 
 var upload = multer({ storage: storage });
 
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+
 app.use(express.static(path.join(__dirname, "static")));
 
 app.get("/ping", (req, res) => {
-  res.send("pong")
-})
+  console.log(req.session);
+  console.log(req.session.id);
+  console.log(req.sessionId);
 
+  res.send({
+    pong: true,
+    session: req.session,
+  });
+});
+app.get("/setv/:value", (req, res) => {
+  console.log("🚀 ~ app.get ~ req.session:", req.session.id);
 
-const exe = require("./ffmpeg")
-app.all("/api", upload.single('file'), async (req, res) => {
+  value = req.params.value;
+  console.log("🚀 ~ app.get ~ value:", value);
+  req.session.userId = value;
+  console.log("🚀 ~ app.get ~ req.session:", req.session);
+
+  arr = req.session.arr || [];
+  arr.push(value);
+
+  req.session.arr = arr;
+
+  res.send({
+    pong: true,
+    session: req.session,
+  });
+});
+
+app.all("/api", upload.single("file"), async (req, res) => {
+  // await new Promise((res) => setTimeout(res, 100));
+  // return res.json({ a: 1 });
+
   const file = req.file;
-
-  if (file) {
-    await new Promise((resolve, reject) => {
-      console.log('File received:', file);
-
-      // Specify the custom location where you want to save the file
-      const customPath = path.join(__dirname, 'videos', 'backz.jpg');
-  
-      // Copy the file to the custom location
-      fsext.copy(file.path, customPath)
-          .then(() => {
-              // res.json({
-              //     message: 'File uploaded and copied successfully',
-              //     originalFile: file.filename,
-              //     customLocation: customPath
-              // });
-
-              resolve();
-          })
-          .catch(err => {
-              console.error('Error copying file:', err);
-              res.status(500).send('Error saving file to custom location');
-          });
-    });
-  } else {
-      res.status(400).send('No file uploaded');
-      
-  }
-  // {
-  //   fieldname: 'file',
-  //   originalname: 'cat.jpg',
-  //   encoding: '7bit',
-  //   mimetype: 'text/plain',
-  //   destination: 'src/uploads/',
-  //   filename: '1723376412983.jpg',
-  //   path: 'src\\uploads\\1723376412983.jpg',
-  //   size: 488854
-  // }
-
-
-  console.log(file);
   const paramMap = JSON.parse(req.body.paramMap);
+  const sceneArr = paramMap.sceneArr;
+  // console.log("🚀 ~ app.all ~ sceneArr:", sceneArr);
 
-  console.log("----@@@----");
-  console.log(paramMap);
-  console.log(paramMap.q1);
-  
-  // paramMap: {"q1":"ab","q2":"wefwefwe"}
+  if (!file) {
+    res.status(400).send("No file uploaded");
+    return;
+  }
 
-  await exe({
-    q1 : {
-      text : paramMap?.q1
-      // text : paramMap?.q1 || "q11 안녕!!"
-    }
-    ,
-    q2 : {
-      text : paramMap?.q2 || "q22 안녕@@"
-    }
-  })
-  const returnFile = fs.readFileSync('./src/output/ou1.mp4');
-  // response file binary
+  const backImgPath = path.join(req.file.path);
+  const fileNm = await genVideo(sceneArr, backImgPath);
 
-  res.setHeader('Content-Type', 'video/mp4');
-  res.setHeader('Content-Disposition', 'attachment; filename=ou1.mp4');
-  res.setHeader('Content-Length', returnFile.length);
-  res.end(returnFile);
+  res.json({
+    fileNm: fileNm,
+  });
 
-  // res.send("HIHI")
-  
+  // const returnFile = fs.readFileSync(outputFilePath);
+  // res.setHeader("Content-Type", "video/mp4");
+  // res.setHeader("Content-Disposition", "attachment; filename=ou1.mp4");
+  // res.setHeader("Content-Length", returnFile.length);
+  // res.end(returnFile);
+});
 
-
-  // console.log(req.body);
-})
-
+app.get("/video/:fileNm", (req, res) => {
+  const fileNm = req.params.fileNm;
+  const filePath = path.join(__dirname, "output", fileNm);
+  res.sendFile(filePath);
+});
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
-})
+});
+
+// const server = https
+//   .createServer(
+//     {
+//       key: fs.readFileSync("./key.pem"),
+//       cert: fs.readFileSync("./cert.pem"),
+//     },
+//     app
+//   )
+//   .listen(3333, () => {
+//     console.log("Server is running on port 3000");
+//   });

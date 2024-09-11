@@ -1,0 +1,69 @@
+@font-face {
+  font-family: "BMJUA_TTF";
+  src: url("./BMJUA_TTF.TTF");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: "BMJUA_TTF";
+}
+
+#mainPhone {
+  background: url("nuggi-cat.png"), url("back.jpg");
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: contain, cover;
+}
+
+.custom-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.left-panel {
+  padding: 1rem;
+}
+
+.sticky-section {
+  position: sticky;
+  top: 1rem;
+}
+
+.right-panel {
+  /* margin-top: 2rem; */
+  position: relative;
+}
+
+.ment-box {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border-radius: 0.375rem;
+}
+
+.ment-content {
+  background-color: white;
+  padding: 1.25rem;
+}
+
+.ment-input {
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+}
+
+.ment-input:focus {
+  border-color: #f56565;
+}
+
+.placeholder-slate-400::placeholder {
+  color: #a0aec0;
+}
