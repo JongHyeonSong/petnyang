@@ -82,6 +82,21 @@ function initVue() {
     methods: {
       onMainClick() {},
 
+      downloadVideo() {
+        const url = document.getElementById("my_video").src;
+        console.log("🚀 ~ downloadVideo ~ url:", url);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "video.mp4";
+
+        document.body.appendChild(a);
+        a.click();
+
+        // Remove the element after triggering the download
+        document.body.removeChild(a);
+      },
+
       async onSnedClick(ment) {
         const formData = new FormData();
 
@@ -117,6 +132,7 @@ function initVue() {
         document.getElementById("my_modal").showModal();
 
         if (fileNm) {
+          vm.videoUrl = `/video/${fileNm}`;
           document.getElementById("my_video").src = `/video/${fileNm}`;
         }
       },
