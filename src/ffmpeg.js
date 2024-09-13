@@ -58,43 +58,43 @@ const LINE_GAP = 70;
 
 const Q1Opt = {
   mentArr: ["어제 애니봤어?", "몇시에 잤어?", "오쪼라고ss"],
-  startPos: { xPos: 10, yPos: 700 },
+  initPos: { xPos: 10, yPos: 700 },
   timeSlice: { start: 0.1, end: 2 },
 };
 const A1Opt = {
   mentArr: ["11시..."],
-  startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+  initPos: { xPos: "(w-text_w-10)", yPos: 700 },
   timeSlice: { start: 2.5, end: 3.5 },
 };
 const Q2Opt = {
   mentArr: ["일찍 잤는데", "왜 계속 졸아?"],
-  startPos: { xPos: 10, yPos: 700 },
+  initPos: { xPos: 10, yPos: 700 },
   timeSlice: { start: 4, end: 8 },
 };
 const A2Opt = {
   mentArr: ["오..."],
-  startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+  initPos: { xPos: "(w-text_w-10)", yPos: 700 },
   timeSlice: { start: 8, end: 11 },
 };
 const A22Opt = {
   mentArr: ["오전..."],
-  startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+  initPos: { xPos: "(w-text_w-10)", yPos: 700 },
   timeSlice: { start: 11, end: 11.5 },
 };
 
 const P1Opt = {
   mentArr: ["줘팸1..."],
-  startPos: { xPos: "10", yPos: 1000 },
+  initPos: { xPos: "10", yPos: 1000 },
   timeSlice: { start: 12.5, end: 20 },
 };
 const P2Opt = {
   mentArr: ["줘팸2..."],
-  startPos: { xPos: "10", yPos: 1100 },
+  initPos: { xPos: "10", yPos: 1100 },
   timeSlice: { start: 13, end: 20 },
 };
 const P3Opt = {
   mentArr: ["줘팸3..."],
-  startPos: { xPos: "10", yPos: 1200 },
+  initPos: { xPos: "10", yPos: 1200 },
   timeSlice: { start: 13.5, end: 20 },
 };
 
@@ -102,7 +102,7 @@ const P3Opt = {
  * 멘트가 엔터키로 여러줄일때 적당한 LINE_GAP으로 살짝띄운 스크립트를 반환해준다
  *
  * mentArr: ["어제 애니봤어?", "몇시에 잤어?", "오쪼라고"],
- * startPos: { xPos:10, yPos: 700 },
+ * initPos: { xPos:10, yPos: 700 },
  * timeSlice: { start: 0.1, end: 2 },
  *
  * 일경우 3줄의 drawtext 스크립트를 반환
@@ -114,12 +114,12 @@ const P3Opt = {
  * ]
  */
 function multiScriptMaker(scene) {
-  const { mentArr, startPos, timeSlice } = scene;
+  const { mentArr, initPos, timeSlice } = scene;
 
   const multipleScripts = mentArr.map((ment, idx) => {
     const combinedDrawText =
       `drawtext=text='${ment}'` +
-      `:x=${startPos.xPos}:y=${startPos.yPos + idx * LINE_GAP}` +
+      `:x=${initPos.xPos}:y=${initPos.yPos + idx * LINE_GAP}` +
       `:${DEFAULT_OPTION}` +
       `:enable='between(t,${timeSlice.start},${timeSlice.end})'`;
 

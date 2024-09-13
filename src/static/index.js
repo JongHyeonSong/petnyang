@@ -4,15 +4,16 @@ const vueData = {
     cat1_1: {
       title: "고양이1 멘트",
       desc: "어제 애니봤어?",
+      ment: "",
       mentArr: ["어제 애니봤어?", "몇시에 잤어?", "오쪼라고"],
-      startPos: { xPos: 10, yPos: 700 },
+      initPos: { xPos: 10, yPos: 700 },
       timeSlice: { start: 0.1, end: 2 },
     },
     cat2_1: {
       title: "고양이2 멘트",
       desc: "11시...?",
       mentArr: ["11시..."],
-      startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
       timeSlice: { start: 2.5, end: 3.5 },
     },
 
@@ -20,7 +21,7 @@ const vueData = {
       title: "고양이1 멘트",
       desc: "일찍 잤는데 왜 계속 졸아?",
       mentArr: ["일찍 잤는데", "왜 계속 졸아?"],
-      startPos: { xPos: 10, yPos: 700 },
+      initPos: { xPos: 10, yPos: 700 },
       timeSlice: { start: 4, end: 8 },
     },
 
@@ -28,7 +29,7 @@ const vueData = {
       title: "고양이2 멘트",
       desc: "오..?",
       mentArr: ["오..."],
-      startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
 
       timeSlice: { start: 8, end: 11 },
     },
@@ -37,7 +38,7 @@ const vueData = {
       title: "고양이2 멘트",
       desc: "오전...",
       mentArr: ["오전..."],
-      startPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
       timeSlice: { start: 11, end: 11.5 },
     },
 
@@ -45,21 +46,21 @@ const vueData = {
       title: "고양이1 줘팸",
       desc: "팸1...",
       mentArr: ["줘팸1..."],
-      startPos: { xPos: 10, yPos: 1000 },
+      initPos: { xPos: 10, yPos: 1000 },
       timeSlice: { start: 12.5, end: 20 },
     },
     pem2: {
       title: "고양이1 줘팸",
       desc: "팸2...",
       mentArr: ["줘팸2..."],
-      startPos: { xPos: 10, yPos: 1100 },
+      initPos: { xPos: 10, yPos: 1100 },
       timeSlice: { start: 13, end: 20 },
     },
     pem3: {
       title: "고양이1 줘팸",
       desc: "팸3...",
       mentArr: ["줘팸3..."],
-      startPos: { xPos: 10, yPos: 1200 },
+      initPos: { xPos: 10, yPos: 1200 },
       timeSlice: { start: 13.5, end: 20 },
     },
 
