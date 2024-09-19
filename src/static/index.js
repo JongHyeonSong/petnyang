@@ -5,62 +5,69 @@ const vueData = {
       title: "고양이1 멘트",
       desc: "어제 애니봤어?",
       ment: "",
-      mentArr: ["어제 애니봤어?", "몇시에 잤어?", "오쪼라고"],
-      initPos: { xPos: 10, yPos: 700 },
+      mentArr: ["냥 책임님", "이번에 사내교육으로", "코딩 배우셨다면서요?"],
+      initPos: { xPos: 20, yPos: 720 },
       timeSlice: { start: 0.1, end: 2 },
     },
     cat2_1: {
       title: "고양이2 멘트",
       desc: "11시...?",
-      mentArr: ["11시..."],
-      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      mentArr: ["넹"],
+      initPos: { xPos: "(w-text_w-20)", yPos: 700 },
       timeSlice: { start: 2.5, end: 3.5 },
     },
 
     cat1_2: {
       title: "고양이1 멘트",
       desc: "일찍 잤는데 왜 계속 졸아?",
-      mentArr: ["일찍 잤는데", "왜 계속 졸아?"],
-      initPos: { xPos: 10, yPos: 700 },
+      mentArr: ["오 그러면", "어느 언어 쓰실 줄 아세요?"],
+      initPos: { xPos: 20, yPos: 720 },
       timeSlice: { start: 4, end: 8 },
     },
 
     cat2_2: {
       title: "고양이2 멘트",
       desc: "오..?",
-      mentArr: ["오..."],
-      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      mentArr: ["C..."],
+      initPos: { xPos: "(w-text_w-20)", yPos: 700 },
 
       timeSlice: { start: 8, end: 11 },
+    },
+    cat1_3: {
+      title: "고양이3 멘트",
+      desc: "일찍 잤는데 왜 계속 졸아?",
+      mentArr: ["오 C? C++?"],
+      initPos: { xPos: 20, yPos: 720 },
+      timeSlice: { start: 9.5, end: 11 },
     },
 
     cat2_3: {
       title: "고양이2 멘트",
       desc: "오전...",
-      mentArr: ["오전..."],
-      initPos: { xPos: "(w-text_w-10)", yPos: 700 },
+      mentArr: ["ChatGPT용~"],
+      initPos: { xPos: "(w-text_w-20)", yPos: 700 },
       timeSlice: { start: 11, end: 11.5 },
     },
 
     pem1: {
       title: "고양이1 줘팸",
       desc: "팸1...",
-      mentArr: ["줘팸1..."],
-      initPos: { xPos: 10, yPos: 1000 },
+      mentArr: ["진실의..."],
+      initPos: { xPos: 20, yPos: 1000 },
       timeSlice: { start: 12.5, end: 20 },
     },
     pem2: {
       title: "고양이1 줘팸",
       desc: "팸2...",
-      mentArr: ["줘팸2..."],
-      initPos: { xPos: 10, yPos: 1100 },
+      mentArr: ["방으로..."],
+      initPos: { xPos: 20, yPos: 1100 },
       timeSlice: { start: 13, end: 20 },
     },
     pem3: {
       title: "고양이1 줘팸",
       desc: "팸3...",
-      mentArr: ["줘팸3..."],
-      initPos: { xPos: 10, yPos: 1200 },
+      mentArr: ["입장..."],
+      initPos: { xPos: 20, yPos: 1200 },
       timeSlice: { start: 13.5, end: 20 },
     },
 
@@ -145,6 +152,21 @@ function initVue() {
         const url = URL.createObjectURL(file);
         const mainPhone = document.getElementById("mainPhone");
         mainPhone.style.backgroundImage = `url(nuggi-cat.png), url(${url})`;
+      },
+
+      async genRandom() {
+        vm.isLoading = true;
+        const response = await fetch("/genRandom");
+        const resJson = await response.json();
+        vm.isLoading = !true;
+
+        const mentValues = Object.values(resJson);
+        console.log("🚀 ~ genRandom ~ mentValues:", mentValues);
+
+        Object.entries(vm.mentList).forEach(([key, value], index, mom) => {
+          value.mentArr = [mentValues[index]];
+        });
+        console.log("🚀 ~ Object.entries ~ vm.mentList:", vm.mentList);
       },
     },
     mounted() {
